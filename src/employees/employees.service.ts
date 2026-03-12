@@ -39,18 +39,10 @@ export class EmployeesService {
 
   update(id: string, updateEmployeeDto: UpdateEmployeeDto) {
     let employeeToUpdate = this.findOne(id);
-    employeeToUpdate = {
+    return {
       ...employeeToUpdate, 
       ...updateEmployeeDto
     };
-
-    this.employees = this.employees.map((employee) => {
-      if(employee.id === id) {
-        employee = employeeToUpdate;
-      }
-      return employee;
-    });
-    return employeeToUpdate;
   }
 
   remove(id: string) {
