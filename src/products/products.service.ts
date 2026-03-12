@@ -52,9 +52,17 @@ export class ProductsService {
   }
 
   update(id: string, updateProductDto: UpdateProductDto) {
-    let productToUpdate = this.findOne(id);
+    let product = this.findOne(id);
+
+    this.products = this.products.map((product) => {
+      if(product.productId == id) return {
+        ...product, 
+        ...updateProductDto
+      }
+      return product;
+    })
     return {
-      ...productToUpdate, 
+      ...product, 
       ...updateProductDto
     };
     }
