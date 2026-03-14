@@ -29,7 +29,8 @@ export class ProductsService {
       loadEagerRelations: true,
       relations: {
         provider: true
-    } });
+      } 
+    });
   }
 
   findOne(id: string) {
@@ -39,11 +40,13 @@ export class ProductsService {
   }
 
   findByProvider(id: string) {
-    /*
-    const productFound = this.products.filter((product) => product.provider === id);
-    if(productFound.length == 0) throw new NotFoundException(); 
-    return productFound;
-    */
+    return this.productRepository.find({
+      where: {
+        provider: {
+          providerId: id
+        }
+      }
+    });
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
