@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ManagersModule } from './managers/managers.module';
 import { LocationsModule } from './locations/locations.module';
 import { RegionsModule } from './regions/regions.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -37,6 +38,7 @@ import { RegionsModule } from './regions/regions.module';
     ManagersModule,
     LocationsModule,
     RegionsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
