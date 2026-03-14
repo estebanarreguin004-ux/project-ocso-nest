@@ -15,7 +15,9 @@ export class EmployeesController {
   }
 
   @Post('/upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', {
+    dest: "/src/uploads/employees/employees-photos"
+  }))
   uploadPhoto(@UploadedFile() file: Express.Multer.File) {
     return 'Ok';
   }
