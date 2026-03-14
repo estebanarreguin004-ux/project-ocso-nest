@@ -12,7 +12,7 @@ export class Product {
     @Column({type: "int"})
     countSeal: number;
 
-    @ManyToOne(() => Provider, (provider) => provider.providerId)
-    @JoinColumn({ name: 'providerId' })
+    @ManyToOne(() => Provider, (provider) => provider.products)
+    @JoinColumn({ name: 'providerId', referencedColumnName: 'providerId' })
     provider: Provider;
 }
