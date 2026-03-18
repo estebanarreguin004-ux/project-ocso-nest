@@ -10,6 +10,8 @@ import { ManagersModule } from './managers/managers.module';
 import { LocationsModule } from './locations/locations.module';
 import { RegionsModule } from './regions/regions.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import { EXPIRES_IN, JWT_KEY } from './auth/Constants/jwt.constants';
 
 
 @Module({
@@ -18,6 +20,11 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
 
+    JwtModule.register({
+      global: true, 
+      secret: JWT_KEY,
+      signOptions: { expiresIn: EXPIRES_IN },
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
