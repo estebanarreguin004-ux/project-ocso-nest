@@ -38,5 +38,17 @@ export class AuthService {
     return token;
   }
 
+  async updateUser(userEmail: string, updateUserDto: CreateUserDto) {
+    const newUserData = await this.userRepository.preload({ 
+      ...updateUserDto,
+      userEmail
+    });
+    if (!newUserData) {
+      throw new UnauthorizedException();
+    }
+    this.userRepository.save(newUserData);
+    return newUserData;
+  }
+
 
 }
