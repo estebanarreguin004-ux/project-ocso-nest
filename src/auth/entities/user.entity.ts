@@ -1,5 +1,6 @@
 import { Employee } from "src/employees/entities/employee.entity"
 import { Manager } from "src/managers/entities/manager.entity"
+import { ManagersModule } from "src/managers/managers.module"
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
@@ -13,10 +14,10 @@ export class User {
     @Column('simple-array', { default: "Employee"})
     userRoles: string[]
 
-    @OneToOne(() => Manager, { eager: true })
+    @OneToOne(() => Manager)
     manager: Manager
 
-    @OneToOne(() => Employee, { eager: true })
+    @OneToOne(() => Employee)
     employee: Employee
 
 

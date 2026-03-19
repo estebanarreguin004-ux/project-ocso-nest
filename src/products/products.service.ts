@@ -15,12 +15,7 @@ export class ProductsService {
   ) {} 
   
   create(createProductDto: CreateProductDto) {
-    const { provider, ...productData } = createProductDto;
-
-    const product = this.productRepository.create({
-      ...productData,
-      provider: provider ? { providerId: provider } as Provider : undefined,
-    });    
+    const product = this.productRepository.create(createProductDto);
     return this.productRepository.save(product);
   }
 
@@ -55,7 +50,6 @@ export class ProductsService {
     const product = await this.productRepository.preload({
       productId: id,
       ...dataToUpdate,
-      provider: provider ? { providerId: provider } as Provider : undefined,
     });
     
     if(!product) throw new NotFoundException();
