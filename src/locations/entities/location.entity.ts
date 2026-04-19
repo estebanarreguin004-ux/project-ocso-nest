@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Employee } from "src/employees/entities/employee.entity";
 import { Manager } from "src/managers/entities/manager.entity";
 import { Region } from "src/regions/entities/region.entity";
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 
 @Entity()
 export class Location {
@@ -34,6 +34,10 @@ export class Location {
     })
     manager: Manager;
 
+    @ApiProperty({ default: '65b405ca-ccde-4e2b-bbf2-1956fb988298' })
+    @Column({ type: 'uuid', nullable: true }) 
+    managerId: string;
+
     @ManyToOne(() => Region, (region) => region.locations)
     @JoinColumn({
         name: 'regionId',
@@ -41,7 +45,10 @@ export class Location {
     })
     region: Region;
 
-    @OneToOne(() => Employee, (employee) => employee.location)
+    @Column({ type: 'int', nullable: true })
+    regionId: number;
+
+    @OneToMany(() => Employee, (employee) => employee.location)
     @JoinColumn({
         name: 'employeeId',
         referencedColumnName: 'employeeId'

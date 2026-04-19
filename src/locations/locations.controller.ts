@@ -13,7 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
-  @Auth()
+  //@Auth()
   @Post()
   create(@Body() createLocationDto: CreateLocationDto) {
     return this.locationsService.create(createLocationDto);
