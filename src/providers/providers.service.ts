@@ -22,7 +22,9 @@ export class ProvidersService {
   }
 
   findOne(id: string) {
-    return this.providerRepository.findOneBy({ providerId: id });
+    const provider = this.providerRepository.findOneBy({ providerId: id });
+    if(!provider) throw new NotFoundException();
+    return provider;
   }
 
   async findOneByName(name: string) {

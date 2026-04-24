@@ -20,7 +20,7 @@ export class Manager {
         name: 'locationId',
         referencedColumnName: 'locationId'
     })
-    location: Location;
+    location: Location | string;
 
     @OneToOne(() => User)
     @JoinColumn({
