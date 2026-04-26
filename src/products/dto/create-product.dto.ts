@@ -7,28 +7,28 @@ export class CreateProductDto {
     @IsString()
     @IsUUID("4")
     @IsOptional()
-    productId: string;
+    productId?: string;
 
     @ApiProperty({
         default: 'Coca-Cola'
     })
     @IsString()
     @MaxLength(40)
-    productName: string;
+    productName!: string;
 
     @ApiProperty({
         default: 10.5
     })
     @IsNumber()
-    price: number;
+    price!: number;
 
     @ApiProperty({
         default: 2
     })
     @IsInt()
-    countSeal: number;
+    countSeal!: number;
 
-    @IsObject()
+    @IsString()
     @IsOptional()
-    provider: Provider;
+    provider?: string;
 }

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { Provider } from './entities/provider.entity';
 import { NotFoundException } from '@nestjs/common';
+import { Product } from 'src/products/entities/product.entity';
 
 @Injectable()
 export class ProvidersService {
@@ -18,11 +19,20 @@ export class ProvidersService {
   }
 
   findAll() {
-    return this.providerRepository.find();
+    return this.providerRepository.find({relations: {
+      products: true
+    }});
   }
 
   findOne(id: string) {
-    const provider = this.providerRepository.findOneBy({ providerId: id });
+    const provider = this.providerRepository.findOne({ 
+      where: {
+        providerId: id 
+      },
+      relations: { 
+        products: true
+      }
+    });
     if(!provider) throw new NotFoundException();
     return provider;
   }

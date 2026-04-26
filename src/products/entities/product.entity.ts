@@ -4,15 +4,20 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "t
 @Entity()
 export class Product {
     @PrimaryGeneratedColumn("uuid")
-    productId: string;
+    productId?: string;
     @Column({type: "text"})
-    productName: string;
+    productName!: string;
     @Column({type: "float"})
-    price: number;
+    price!: number;
     @Column({type: "int"})
-    countSeal: number;
+    countSeal!: number;
 
     @ManyToOne(() => Provider, (provider) => provider.products)
     @JoinColumn({ name: 'providerId', referencedColumnName: 'providerId' })
-    provider: Provider;
+    provider?: Provider | string;
 }
+
+
+
+
+
