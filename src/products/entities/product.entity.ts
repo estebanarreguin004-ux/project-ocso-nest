@@ -16,8 +16,3 @@ export class Product {
     @JoinColumn({ name: 'providerId', referencedColumnName: 'providerId' })
     provider?: Provider | string;
 }
-
-
-
-
-
