@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import * as AWS from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage"; // Importación necesaria
 
 @Injectable()
 export class AwsService {
-    private s3 = new AWS.S3Client({
-        region:"us-east-2",
+    private s3 = new S3Client({
+        region: "us-east-2",
         credentials: {
             accessKeyId: process.env.accessKey_bucket,
             secretAccessKey: process.env.secretKeyBucket
@@ -12,20 +13,21 @@ export class AwsService {
     });
 
     async uploadFile(file: Express.Multer.File) {
-        const key = file.originalname
-        const url = `https://nest-ocso-test31.s3.us-east-2.amazonaws.com/${key}`
-        const bucket = "nest-ocso-test31"
-        //https://nest-ocso-test31.s3.us-east-2.amazonaws.com/foto2.jpeg
-        const command =new AWS.PutObjectCommand({
-            Key: key,
-            Body: file.buffer,
-            "Bucket": bucket
+        const bucket = "nest-ocso-test31";
 
-        })
+        const key = file.originalname.replace(/\s/g, '-');
 
-        await this.s3.send(command);
-        return url;
-        
+        const parallelUpload = new Upload({
+            client: this.s3,
+            params: {
+                Bucket: bucket,
+                Key: key,
+                Body: file.buffer,
+                ContentType: file.mimetype,
+            },
+        });
 
+        const result = await parallelUpload.done();
+        return result.Location;
     }
 }

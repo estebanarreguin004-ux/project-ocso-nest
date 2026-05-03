@@ -11,8 +11,10 @@ import { TOKEN_NAME } from './Constants/jwt.constants';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
-  signUp(@Body() createUserDto: CreateUserDto) {
+  @Post('register/manager')
+
+  @Post('register/employee/[id]')
+  signUp(@Body() createUserDto: CreateUserDto, @Param("id") id: string) {
     return this.authService.registerUser(createUserDto);
   }
 

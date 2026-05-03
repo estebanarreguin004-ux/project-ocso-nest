@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToOne } from "typeorm";
 import { Location } from "src/locations/entities/location.entity";
 import { User } from "src/auth/entities/user.entity";
+import { StringDecoder } from "string_decoder";
 
 @Entity()
 export class Employee {
@@ -17,10 +18,12 @@ export class Employee {
     @Column({type: "text", nullable: true})
     employeePhoto: string; 
 
+    @Column({ type: "int", nullable: true })
+    locationId: number;
+
     @ManyToOne(() => Location, (location) => location.employees)
     @JoinColumn({
-        name: 'locationId',
-        referencedColumnName: 'locationId'
+        name: 'locationId'
     })
     location: Location;
 

@@ -9,8 +9,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Employee } from './entities/employee.entity';
 import { ApiAuth } from 'src/auth/decorators/api.decorator';
 import { AwsService } from 'src/aws/aws.service';
-import { identity } from 'rxjs';
-
+ 
 //@ApiAuth()
 @ApiTags('Employees')
 @Controller('employees')
@@ -21,14 +20,12 @@ export class EmployeesController {
   ) {}
 
   @Post("/:id/upload")
-  @UseInterceptors(FileInterceptor('file', {
-    dest: "./uploads/employees/photos"
-  }))
+  @UseInterceptors(FileInterceptor('file'))
   async uploadPhoto(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
-    const response = await this.awsService.uploadFile(file)
+    const photoUrl = await this.awsService.uploadFile(file);
     return this.employeesService.update(id, {
-      employeePhoto: response
-    })
+    employeePhoto: photoUrl
+  });
   }
 
   
@@ -44,8 +41,16 @@ export class EmployeesController {
     } as Employee
   })
   @Post()
-  create(@Body() createEmployeeDto: CreateEmployeeDto) {
-    return this.employeesService.create(createEmployeeDto);
+  @UseInterceptors(FileInterceptor('employeePhoto'))
+  async create(@Body() createEmployeeDto: CreateEmployeeDto, @UploadedFile() file: Express.Multer.File) {
+    if(!file){
+      return this.employeesService.create(createEmployeeDto);
+    } else {
+      const photoUrl = await this.awsService.uploadFile(file)
+      createEmployeeDto.employeePhoto = photoUrl
+      return this.employeesService.create(createEmployeeDto);
+    }
+
   }
 
   
@@ -70,8 +75,17 @@ export class EmployeesController {
 
   @Auth(ROLES.EMPLOYEE)
   @Patch('/:id')
-  update(@Param('id', new ParseUUIDPipe({version: '4'})) id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
-    return this.employeesService.update(id, updateEmployeeDto);
+  @UseInterceptors(FileInterceptor('employeePhoto'))
+  async update(@Param('id', new ParseUUIDPipe({version: '4'})) id: string, @Body() updateEmployeeDto: UpdateEmployeeDto,
+        @UploadedFile() file: Express.Multer.File) {
+      if(!file){ 
+        delete updateEmployeeDto.employeePhoto;
+        return this.employeesService.update(id, updateEmployeeDto);
+      } else {
+        const photoUrl = await this.awsService.uploadFile(file);
+        updateEmployeeDto.employeePhoto = photoUrl;
+        return this.employeesService.update(id, updateEmployeeDto);
+      }  
   }
 
   @Auth(ROLES.MANAGER)
